@@ -1,0 +1,35 @@
+#!/bin/bash
+
+dir_cur=$PWD
+dir_src=$PWD/Src
+dir_test=$PWD/Examples
+
+#------------------------------------#
+# go to source directory and compile #
+#------------------------------------#
+cd $dir_src
+make
+
+cd $dir_test
+ln -f -s $dir_src/Easy .
+
+#------------------------------#
+# browse through all the tests #
+#------------------------------#
+for i in $( ls $dir_test/*.d ); do
+
+  if [ $i != "CVS" ]; then
+    ./Easy $i +eps
+  fi
+
+done
+
+#-------------------------------#
+# find the md5 sum for checking #
+#-------------------------------#
+md5sum *.e *.n *.s *.eps > md5.now
+rm -f *.e *.n *.s *.eps
+
+echo 'done !'
+
+cd $dir_cur
